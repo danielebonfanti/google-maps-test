@@ -4,13 +4,33 @@
 
     <link rel="stylesheet" type="text/css" href="./style.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
-    <script type="module" src="./index.js"></script>
     <!-- prettier-ignore -->
     <script>(g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})
         ({key: "AIzaSyDJk024r9T2TygInD6hsQ30tOsk10NgebI", v: "weekly"});</script>
   </head>
   <body>
-    <gmp-map center="45.4654219,9.1859243" zoom="13" map-id="DEMO_MAP_ID">
-    </gmp-map>
+    <div class="container">
+      <div class="address-search">
+        <div class="search-container">
+          <input
+            id="autocomplete-input"
+            placeholder="Enter a location"
+            type="text"
+            class="address-search"
+            oninput="onSearchInput(this.value)"
+          />
+
+          <div class="autocomplete-card">
+            <ul id="results-list"></ul>
+          </div>
+        </div>
+      </div>
+      <div class="map">
+        <gmp-map center="45.4654219,9.1859243" zoom="13" map-id="DEMO_MAP_ID">
+        </gmp-map>
+      </div>
+    </div>
+
+    <script type="module" src="./index.js"></script>
   </body>
 </html>
