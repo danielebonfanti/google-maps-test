@@ -73,7 +73,7 @@ function onSearchInput(query) {
         componentRestrictions: { country: "it" },
       },
       (predictions, status) => {
-        handlePredictionResults(predictions, status);
+        handlePredictionResults(predictions, status, list);
       },
     );
   }, 300);
@@ -84,7 +84,7 @@ function onSearchInput(query) {
  * @param {*} predictions
  * @param {*} status
  */
-function handlePredictionResults(predictions, status) {
+function handlePredictionResults(predictions, status, list) {
   list.innerHTML = "";
 
   if (status !== google.maps.places.PlacesServiceStatus.OK || !predictions) {
@@ -141,7 +141,8 @@ async function calculateMarkers(place, status) {
   if (status != "OK") return;
 
   var clinicsWithDistance = calculateClinicsDistance(place);
-  displayClinicsOnMap(clinicsWithDistance);
+  displayMarkerClinicsOnMap(clinicsWithDistance);
+  displayClosestClinicsList(clinicsWithDistance);
 
   // RIGENERA IL TOKEN per la prossima ricerca
   sessionToken = new google.maps.places.AutocompleteSessionToken();
@@ -151,7 +152,7 @@ async function calculateMarkers(place, status) {
  * This function takes an array of clinics with their distance from the selected place, creates a marker for each clinic on the map, and sets up an info window that displays the clinic's name when the marker is clicked. It also adjusts the map bounds to ensure all markers are visible.
  * @param {*} clinicsWithDistance
  */
-function displayClinicsOnMap(clinicsWithDistance) {
+function displayMarkerClinicsOnMap(clinicsWithDistance) {
   let markerArray = [];
   const bounds = new google.maps.LatLngBounds();
   clinicsWithDistance.forEach((clinic) => {
@@ -180,6 +181,20 @@ function displayClinicsOnMap(clinicsWithDistance) {
   });
 
   innerMap.fitBounds(bounds);
+}
+
+/**
+ * This function takes an array of clinics with their distance from the selected place and displays a list of the 5 closest clinics in the "closest-clinics-list" element. Each list item shows the clinic's name and its distance from the selected place in kilometers, rounded to two decimal places.
+ * @param {*} clinicsWithDistance
+ */
+function displayClosestClinicsList(clinicsWithDistance) {
+  const list = document.getElementById("closest-clinics-list");
+  list.innerHTML = "";
+  clinicsWithDistance.forEach((clinic) => {
+    const li = document.createElement("li");
+    li.textContent = `${clinic.NAME} (${clinic.distance.toFixed(2)} km)`;
+    list.appendChild(li);
+  });
 }
 
 /**
