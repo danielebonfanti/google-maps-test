@@ -57,9 +57,11 @@ async function initAutocomplete() {
  * @returns
  */
 function onSearchInput(query) {
-  const list = document.getElementById("results-list");
+  if (query.length < 3) return;
 
+  const list = document.getElementById("results-list");
   if (!query) {
+    sessionToken = new google.maps.places.AutocompleteSessionToken();
     list.innerHTML = "";
     return;
   }
@@ -126,7 +128,7 @@ function selectPlace(placeId) {
       placeId: placeId,
       sessionToken: sessionToken,
       // FONDAMENTALE: Chiedere solo i dati che servono (Basic Data = Costo minore)
-      fields: ["geometry", "name", "formatted_address", "geometry"],
+      fields: ["geometry.location"],
     },
     (place, status) => calculateMarkers(place, status),
   );
