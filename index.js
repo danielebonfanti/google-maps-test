@@ -71,12 +71,17 @@ function onSearchInput(query) {
           return;
         }
 
+        document.getElementById("autocomplete-card").classList.remove("hidden");
+
         predictions.forEach((prediction) => {
           const li = document.createElement("li");
           li.textContent = prediction.description;
           li.onclick = () => {
             selectPlace(prediction.place_id);
-            list.innerHTML = ""; // Chiude la lista dopo il click
+            document
+              .getElementById("autocomplete-card")
+              .classList.add("hidden");
+            list.innerHTML = "";
             document.getElementById("autocomplete-input").value =
               prediction.description;
           };
